@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf8')
 
 # 设置数据库路径
 # dbpath="/Volumes/Storage/1010/admin/Documents/mysite/db.sqlite3"
-dbpath="/Users/admin/Desktop/activeDataBase.db"
+dbpath = os.path.dirname(__file__)[:-5] + '_LocProjScanner/_Projects/activeDataBase.db'
 
 coveredProj = ['ARD', 'OSX', 'OSX Updates', {'FCP':['Final Cut Pro', 'Compressor', 'Motion']},
 				{'iWork':['Pages', 'Numbers', 'Keynote', 'iWork']}, 'Spark', 'Server OSX', 'CPU', 'Logic',
