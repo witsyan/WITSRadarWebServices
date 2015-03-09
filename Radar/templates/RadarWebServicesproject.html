@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<style type="text/css">
+	p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
+	summary {font: 14.0px Helvetica}
+	details {font: 14.0px Helvetica}
+	form {font: 14.0px Helvetica}
+	input {font: 14.0px Helvetica}
+	option {font: 14.0px Helvetica}
+	a {font: 14.0px Helvetica}
+</style>
+{% extends "RadarWebServicesbase.html" %}
+{% block title %}{{ project }}{% endblock %}
+{% block content %}
+<script type="text/javascript" src="/static/admin/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/highcharts.js"></script>
+<script type="text/javascript" src="/static/admin/js/modules/exporting.js"></script>
+
+<script type="text/javascript">
+Highcharts.setOptions({colors:['#7EB6EA', '#EF5E81', '#93EB82', '#F5A362', '#8188E6', '#434348', 'blue', 'green', 'yellow',]});
+$(function () {
+        $('#containercolumnbasic').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ' '
+            },
+            subtitle: {
+                text: ' '
+            },
+            xAxis: {
+                categories: {{ columnbasic.langlist | safe }}
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ' '
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'New',
+                data: {{ columnbasic.newlist | safe }}    
+            }, {
+                name: 'BounceBack',
+                data: {{ columnbasic.bouncebacklist | safe }}
+    
+            }, {
+                name: 'Submit',
+                data: {{ columnbasic.submitlist | safe }}
+    
+            }, {
+                name: 'LocQA',
+                data: {{ columnbasic.locQAlist | safe }}
+    
+            }, {
+                name: 'MisComponent',
+                data: {{ columnbasic.miscomponentlist | safe }}
+    
+            }, {
+                name: 'Closed',
+                data: {{ columnbasic.closelist | safe }}
+    
+            }]
+        });
+    });
+</script>
+<script type="text/javascript">
+$(function () {
+        $('#containerline').highcharts({
+            title: {
+                text: ' ',
+                x: -20 //center
+            },
+            subtitle: {
+                text: ' ',
+                x: -20
+            },
+            xAxis: {
+                categories: {{ containerline.timelist | safe }}
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Analyze',
+                data: {{ containerline.analyze | safe }}
+            }, {
+                name: 'Integrate',
+                data: {{ containerline.integrate | safe }}
+            }, {
+                name: 'Verify',
+                data: {{ containerline.verify | safe }}
+            }, {
+                name: 'Build',
+                data: {{ containerline.build | safe }}
+            }, {
+                name: 'Total',
+                data: {{ containerline.total | safe }}
+            }]
+        });
+    });    
+</script>
+
+<form name="input" action="/RadarWebServicesprojectselect/" method="get">
+From: <select name="startday">
+{% for d in dailys %}
+{% if d == startday %}
+<option value="{{ d }}" selected="selected">{{ d }}</option>
+{% else %}
+<option value="{{ d }}">{{ d }}</option>
+{% endif %}
+{% endfor %}
+</select>
+to <select name="endday">
+{% for d in dailys %}
+{% if d == endday %}
+<option value="{{ d }}" selected="selected">{{ d }}</option>
+{% else %}
+<option value="{{ d }}">{{ d }}</option>
+{% endif %}
+{% endfor %}
+</select>
+<input type="submit" value="View" />
+</form>
+<br>
+<div id="containercolumnbasic" style="min-width: 500px; height: 300px; margin: 0 auto"></div>
+<br/>
+<div id="containerline" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+</p>
+<!--
+<details open>
+<summary>column-stacked</summary>
+<br/>
+<div id="containercolumnstacked" style="min-width: 500px; height: 300px; margin: 0 auto"></div>
+</details>
+<br/>
+<details open>
+<summary>column-negative</summary>
+<br/>
+<div id="containercolumn" style="min-width: 500px; height: 300px; margin: 0 auto"></div>
+</details>
+<br/>
+!-->
+
+<!--Daily Activity: New - <a href="{{ total.New}}">{{total.NewNumber}}</a>
+BounceBack - <a href="{{ total.BounceBack}}">{{total.BounceBackNumber}}</a>
+MoveToVerify - <a href="{{ total.MoveToVerify}}">{{total.MoveToVerifyNumber}}</a>
+Closed - <a href="{{ total.Closed}}">{{total.ClosedNumber}}</a><br>
+US bugs: {{ total.USbugs }}
+!-->
+{{ projectdaily | safe }}
+<br/>
+{{ usbugdetail | safe }}
+</summary>
+	<br/>
+	{{ projectdetials.projectdetialsstr | safe }}
+	<!--
+	{% for item in detials %}
+	<details open>
+	<summary>{{ item.lang }}</summary>
+	<br>({{ item.NewNumber }})New:  <a href="{{ item.New}}">{{ item.New}}</a><br>
+	({{ item.BounceBackNumber }})BounceBack:  <a href="{{ item.BounceBack }}">{{ item.BounceBack }}</a><br>
+	({{ item.MoveToVerifyNumber }})MoveToVerify:  <a href="{{ item.MoveToVerify}}">{{ item.MoveToVerify }}</a><br>
+	({{ item.ClosedNumber }})Closed:  <a href="{{ item.Closed}}">{{ item.Closed }}</a></details><br>
+	{% endfor %}
+	!-->
+</details><br/>
+{% endblock %}

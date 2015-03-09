@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<title>{{ webinfo.title }}</title>
+<style type="text/css">
+	p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
+	p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 28.0px Helvetica}
+	a {font: 14.0px Helvetica}
+</style>
+<body>
+<table width="100%" border="0" align="center">
+<tr>
+<td colspan="2" style="background-color:#ADD8E6;">
+<h1 align="center"><p class="p2"><b>{{ webinfo.title }}</b></p></h1>
+</td>
+</tr>
+
+<tr valign="top">
+<td style="background-color:#F5F5DC;width:200px;text-align:top;">
+<p class="p1"><b>Projects</b></p><br>
+{% for proj in projects %}
+<a href="/RadarWebServicesprojectselect/?Project={{ proj }}" target="iframe_a">- {{ proj }}</a><br>
+{% endfor %}
+</td>
+<td style="background-color:#EEEEEE;height:200px;text-align:top;">
+{% if project == 'null' %}
+<iframe src="/welcome" name="iframe_a" width="100%" height="750" frameborder="0"></iframe>
+{% else %}
+<iframe src="/RadarWebServicesprojectselect/?={{ project }}" name="iframe_a" width="100%" height="750" frameborder="0"></iframe>
+{% endif %}
+</td>
+</tr>
+<tr>
+<td colspan="2" style="background-color:#99bbbb;text-align:center;">{{ webinfo.copyright }}</td>
+</tr>
+</table>
+</body>
+</html>

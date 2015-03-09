@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<title>title</title>
+<style type="text/css">
+      #canvas {
+         background: #ADD8E6;
+         -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+         -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+         box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+      }
+      
+</style>
+<script type="text/javascript">
+var projects = {{ projects | safe }};
+</script>
+<body>
+
+<table border="0" align="center" width = 1400>
+<tr >
+<td width = 198 align = "center" style="background-color:#ADD8E6;">0</td>
+<td width = 198 align = "center" style="background-color:#ADD8E6;">1</td>
+<td width = 198 align = "center" style="background-color:#ADD8E6;">2</td>
+<td width = 198 align = "center" style="background-color:#ADD8E6;">3</td>
+<td width = 198 align = "center" style="background-color:#ADD8E6;">4</td>
+<td width = 198 align = "center" style="background-color:#ADD8E6;">5</td>
+<td width = 198 align = "center" style="background-color:#ADD8E6;">6</td>
+</tr>
+<tr>
+<td style="background-color:#EEEEEE;height:{% if BHeight > 600 %}600{% else %}{{ BHeight }}{% endif %}px;text-align:top;" colspan = "7">
+<div style="width:1400; height:{% if BHeight > 600 %}600{% else %}{{ BHeight }}{% endif %}px; overflows:scroll; overflow-x:hidden;">
+<canvas id='canvas' width='1400' height='{{ CHeight }}'>
+Canvas not supported
+</canvas>
+</div>
+    <script src = '/static/admin/js/sprites.js'></script>
+    <script src = '/static/admin/js/shapes.js'></script>
+<script src = '/static/admin/js/ScheduleTest.js'></script>
+</td>
+</tr>
+<tr>
+<td style="background-color:#EEEEEE;height:200px;text-align:top;"  colspan = "7">
+<iframe src="t.html" id="iframe_a" name="iframe_a" width="100%" height="750" frameborder="0"></iframe>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

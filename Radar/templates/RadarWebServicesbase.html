@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <html lang="en">
+<head>
+<title></title>
+<style type="text/css">
+	p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
+</style>
+</head>
+<body>
+<h3><p class="p1"><b>{% block title %}{% endblock %}</b></p></h1>
+{% block content %}{% endblock %}
+{% block footer %}
+<hr>
+<p class="p1">{{ webinfo.base }}</p> {% endblock %}
+</body>
+</html>
