@@ -11,7 +11,8 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 # 设置数据库路径
-dbpath = os.path.dirname(__file__)[:-5] + '_LocProjScanner/_Projects/activeDataBase.db'
+# dbpath="/Volumes/Storage/1010/admin/Documents/mysite/db.sqlite3"
+dbpath="/Users/admin/Desktop/activeDataBase.db"
 
 coveredProj = ['ARD', 'OSX', 'OSX Updates', {'FCP':['Final Cut Pro', 'Compressor', 'Motion']},
 				{'iWork':['Pages', 'Numbers', 'Keynote', 'iWork']}, 'Spark', 'Server OSX', 'CPU', 'Logic',
@@ -365,8 +366,7 @@ def getCountFromCount(project,table="DailyCount"):
 # print getCountFromCount("OSX")
 
 def getKeyWordsFromAssignee(table="WitsAssignee"):
-	result = ["AutoLoc [Investigate]","Category [Translation]","Category [HI/Layout]","Others","Pending"]
-	return result
+	return ['Category [LocFunctional]', 'AutoLoc [Investigate]', 'Category [Translation]', 'Category [HI/Layout]', 'Category [TransEngineering]','Others']
 
 
 def getMaxAndMinDayFromAssignee(project,table="WitsAssignee"):
@@ -435,13 +435,13 @@ def getDataFromAssignee(arr,fromtodate):
 		keyword = str(aa[2])
 		time = str(aa[3])
 		if time >= fromdate and time <= todate:
-			if lang in dataDict.keys():
+			if lang in dataDict.keys() and keyword in Keys:
 				dataDict[lang][keyword]["count"] += 1
 				if ID in dataDict[lang][keyword]["id"]:
 					pass
 				else:
 					dataDict[lang][keyword]["id"].append(ID)
-			else:
+			if lang not in dataDict.keys() and keyword in Keys:
 				dataDict[lang] = {}
 				for bb in Keys:
 					dataDict[lang][bb] = {}
@@ -466,37 +466,53 @@ def getCountAndDetailFromAssignee(project,fromtodate="current",table="WitsAssign
 	translationcount = []
 	layoutcount = []
 	otherscount = []
+	locFunccount = []
+	engineercount = []
 	autolist = []
 	translationlist = []
 	layoutlist = []
 	otherslist = []
+	locFunclist = []
+	engineerlist = []
 	for aa in langlist:
 		autocount.append(dataDict[aa]["AutoLoc [Investigate]"]["count"])
 		translationcount.append(dataDict[aa]["Category [Translation]"]["count"])
 		layoutcount.append(dataDict[aa]["Category [HI/Layout]"]["count"])
 		otherscount.append(dataDict[aa]["Others"]["count"])
+		locFunccount.append(dataDict[aa]["Category [LocFunctional]"]["count"])
+		engineercount.append(dataDict[aa]["Category [TransEngineering]"]["count"])
 		if len(dataDict[aa]["AutoLoc [Investigate]"]["id"]) == 0:
 			autolist.append("")
 		else:
 			temp = "radar://problem/" + "&".join(dataDict[aa]["AutoLoc [Investigate]"]["id"])
 			autolist.append(temp)
 		if len(dataDict[aa]["Category [Translation]"]["id"]) == 0:
-			autolist.append("")
+			translationlist.append("")
 		else:
 			temp = "radar://problem/" + "&".join(dataDict[aa]["Category [Translation]"]["id"])
-			autolist.append(temp)
+			translationlist.append(temp)
 		if len(dataDict[aa]["Category [HI/Layout]"]["id"]) == 0:
-			autolist.append("")
+			layoutlist.append("")
 		else:
 			temp = "radar://problem/" + "&".join(dataDict[aa]["Category [HI/Layout]"]["id"])
-			autolist.append(temp)
+			layoutlist.append(temp)
 		if len(dataDict[aa]["Others"]["id"]) == 0:
-			autolist.append("")
+			otherslist.append("")
 		else:
 			temp = "radar://problem/" + "&".join(dataDict[aa]["Others"]["id"])
-			autolist.append(temp)
+			otherslist.append(temp)
+		if len(dataDict[aa]["Category [LocFunctional]"]["id"]) == 0:
+			locFunclist.append("")
+		else:
+			temp = "radar://problem/" + "&".join(dataDict[aa]["Others"]["id"])
+			locFunclist.append(temp)
+		if len(dataDict[aa]["Category [TransEngineering]"]["id"]) == 0:
+			engineerlist.append("")
+		else:
+			temp = "radar://problem/" + "&".join(dataDict[aa]["Others"]["id"])
+			engineerlist.append(temp)
 	
-	return {"Language":langlist,"AutoLoc":autocount,"Translation":translationcount,"Layout":layoutcount,"Others":otherscount},{"Language":langlist,"AutoLoc":autolist,"Translation":translationlist,"Layout":layoutlist,"Others":otherslist}
+	return {"Language":langlist,"LocFunc":locFunccount,"AutoLoc":autocount,"Translation":translationcount,"Layout":layoutcount,"Engineer":engineercount,"Others":otherscount},{"Language":langlist,"LocFunc":locFunclist,"AutoLoc":autolist,"Translation":translationlist,"Layout":layoutlist,"Engineer":engineerlist,"Others":otherslist}
 
 
 # print getCountAndDetailFromAssignee("OSX","2011-01-01~2016-01-01")
