@@ -64,8 +64,6 @@ def RadarWebServiceskeywords(request):
         kcolumnbasic,radarurls=getCountAndDetailFromAssignee(project)
     weeksList = getWeekList(project)
     x, y = getMaxAndMinDayFromAssignee(project,table="WitsAssignee")
-    xx = getweekslist2(x,y)
-    ii = getweekslist(x,y)
     return render_to_response('RadarWebServiceskeywords.html',{"project":project, "dailys":dailys, 'webinfo':webinfo, 'kcolumnbasic':kcolumnbasic, 'radarurls':radarurls, 'weeksList':weeksList, 'startweek':startweek, 'endweek':endweek,})
 
 
