@@ -9,7 +9,6 @@
 	a {font: 14.0px Helvetica}
 </style>
 {% extends "RadarWebServicesbase.html" %}
-{% load Radartagandfilter %}
 {% block title %}{{ project }}{% endblock %}
 {% block content %}
 <script type="text/javascript" src="/static/admin/js/jquery-1.8.3.min.js"></script>
@@ -44,11 +43,15 @@ $(function () {
             tooltip: {
                 shared: true,
                 useHTML: true,
-               formatter:function (){
-               //alert(this);
+                snap: 0,
+                hideDelay: 500,
+                //positioner:function(){
+                //return {x:0,y:0};
+                //},
+                //followPointer: False,
+                formatter:function (){
+                //alert(this);
                 return gettooltip(this)//this.point.x
-					
-					//return "999";
                 },
 
             },
@@ -62,11 +65,19 @@ $(function () {
                 name: 'Translation',
                 data: {{ kcolumnbasic.Translation | safe }}    
             }, {
-                name: 'Layout',
+                name: 'HI/Layout',
                 data: {{ kcolumnbasic.Layout | safe }}
     
             }, {
                 name: 'AutoLoc',
+                data: {{ kcolumnbasic.AutoLoc | safe }}
+    
+            }, {
+                name: 'LocFunctional',
+                data: {{ kcolumnbasic.AutoLoc | safe }}
+    
+            }, {
+                name: 'TransEngineering',
                 data: {{ kcolumnbasic.AutoLoc | safe }}
     
             }, {
@@ -81,6 +92,7 @@ function gettooltip(ll)
 {
 	//alert(ll);
 	var radarurls = {{ radarurls | safe }},
+	namemap = {"LocFunctional":"LocFunc","AutoLoc":"AutoLoc","Translation":"Translation","HI/Layout":"Layout","TransEngineering":"Engineer","Others":"Others"},
 	lan = ll.x,
 	ps = ll.points,
 	re = '<span style="font-size:10px">'+ lan +'</span><table>';
@@ -88,12 +100,12 @@ function gettooltip(ll)
 	for (var i = 0; i < ps.length; i++) {
 		var series = ps[i].series
 		if(ps[i].y > 0){
-			re = re + '<tr><td style="color:' + series.color + ';padding:0">' + series.name + ': </td>' +
-                    '<td style="padding:0"><b><a href="' +radarurls[series.name][langindex]+ '">' + ps[i].y + '</a></b></td></tr>';
+			re = re + '<tr><td style="color:' + series.color + ';padding:0">' + series.name + ':</td>' +
+                    '<td style="padding:0"><b><a href="' +radarurls[namemap[series.name]][langindex]+ '">' + ps[i].y + '</a></b></td></tr>';
         }
         else
         {
-			re = re + '<tr><td style="color:' + series.color + ';padding:0">' + series.name + ': </td>' +
+			re = re + '<tr><td style="color:' + series.color + ';padding:0">' + series.name + ':</td>' +
                     '<td style="padding:0"><b>' + ps[i].y + '</b></td></tr>';
         }
 	}
