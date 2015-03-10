@@ -503,16 +503,16 @@ def getCountAndDetailFromAssignee(project,fromtodate="current",table="WitsAssign
 		if len(dataDict[aa]["Category [LocFunctional]"]["id"]) == 0:
 			locFunclist.append("")
 		else:
-			temp = "radar://problem/" + "&".join(dataDict[aa]["Others"]["id"])
+			temp = "radar://problem/" + "&".join(dataDict[aa]["Category [LocFunctional]"]["id"])
 			locFunclist.append(temp)
 		if len(dataDict[aa]["Category [TransEngineering]"]["id"]) == 0:
 			engineerlist.append("")
 		else:
-			temp = "radar://problem/" + "&".join(dataDict[aa]["Others"]["id"])
+			temp = "radar://problem/" + "&".join(dataDict[aa]["Category [TransEngineering]"]["id"])
 			engineerlist.append(temp)
 	
 	return {"Language":langlist,"LocFunc":locFunccount,"AutoLoc":autocount,"Translation":translationcount,"Layout":layoutcount,"Engineer":engineercount,"Others":otherscount},{"Language":langlist,"LocFunc":locFunclist,"AutoLoc":autolist,"Translation":translationlist,"Layout":layoutlist,"Engineer":engineerlist,"Others":otherslist}
 
 
-# print getCountAndDetailFromAssignee("OSX","2011-01-01~2016-01-01")
+print getCountAndDetailFromAssignee("OSX","2011-01-01~2016-01-01")
 
