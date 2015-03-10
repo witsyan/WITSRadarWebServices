@@ -278,7 +278,7 @@ def witsActive(DailyActiveDB, proj, projKeyword):
 	for bug in currentRadarIDs:
 		handledata.updatedata2(DailyActiveDB, bug, 'Others')
 
-witsActive(activeDB, 'OSX', keywords)
+# witsActive(activeDB, 'OSX', keywords)
 
 for proj in coveredProj:
 	projDB, projFolder, logs = projectFrame(proj)
