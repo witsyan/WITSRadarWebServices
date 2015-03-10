@@ -6,7 +6,8 @@ __author__ = 'Tinyliu@wistronits.com, tinyliu@me.com'
 import subprocess, re, simplejson, os, sys, time, datetime
 reload(sys) 
 sys.setdefaultencoding('utf-8')
-
+sys.path.append(os.path.dirname(__file__))
+from RadarArgs import RadarArgs
 pyScript = os.path.dirname(__file__)
 
 projectFolder = pyScript[:pyScript.find('Script/_Python')] + '_ScheduleProjects'
@@ -75,14 +76,7 @@ def lastModifiedAt(advance=7):
 	return lastWeek.isoformat()
 
 times = 0
-projList = ['ARD', 'OSX Updates', 'CPU', 'Final Cut Pro', 'Compressor', 'Motion', 'Spark',
-	'Server OSX', 'iWork', 'Pages', 'Numbers', 'Keynote']
-
-coveredProj = ['ARD', 'OSX', 'OSX Updates', 'Final Cut Pro', 'Compressor', 'Motion',
-	'Pages', 'Numbers', 'Keynote', 'iWork', 'Spark', 'Server OSX', 'CPU', 'Logic',
-	'iTunes Mac', 'iTunes Win', 'Aperture', 'iMovie', 'iBooks Author', 'iCloud CP Win', 'iPhoto',
-	'ACUtil', 'MainStage', 'Safari Mac', 'iTunesProducer', 'QuickTime Mac', 'QuickTime Windows',
-	'AirPort Mac', 'AirPort Win', 'Java'] # Loc:Proj:OSX Updates
+coveredProj = RadarArgs.coveredProj # Loc:Proj:OSX Updates
 
 while True:
 	for proj in coveredProj:

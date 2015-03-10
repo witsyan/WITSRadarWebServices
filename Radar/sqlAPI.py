@@ -14,11 +14,10 @@ sys.setdefaultencoding('utf8')
 # dbpath="/Volumes/Storage/1010/admin/Documents/mysite/db.sqlite3"
 dbpath = os.path.dirname(__file__)[:-5] + '_LocProjScanner/_Projects/activeDataBase.db'
 
-coveredProj = ['ARD', 'OSX', 'OSX Updates', {'FCP':['Final Cut Pro', 'Compressor', 'Motion']},
-				{'iWork':['Pages', 'Numbers', 'Keynote', 'iWork']}, 'Spark', 'Server OSX', 'CPU', 'Logic',
-				'iTunes Mac', 'iTunes Win', 'Aperture', 'iMovie', 'iBooks Author', 'iCloud CP Win', 'iPhoto',
-				'ACUtil', 'MainStage', 'Safari Mac', 'iTunesProducer', 'QuickTime Mac', 'QuickTime Windows',
-				'AirPort Mac', 'AirPort Win', 'Java'] # Loc:Proj:OSX Updates
+scriptPath = os.path.dirname(__file__)[:-5] + '_LocProjScanner/Script/_Python'
+sys.path.append(scriptPath)
+from RadarArgs import RadarArgs 
+coveredProj = RadarArgs.coveredProj # Loc:Proj:OSX Updates
 
 # 功能：获得表所有的project
 # table：数据库表名
@@ -366,7 +365,7 @@ def getCountFromCount(project,table="DailyCount"):
 # print getCountFromCount("OSX")
 
 def getKeyWordsFromAssignee(table="WitsAssignee"):
-	return ['Category [LocFunctional]', 'AutoLoc [Investigate]', 'Category [Translation]', 'Category [HI/Layout]', 'Category [TransEngineering]','Others']
+	return RadarArgs.keywords + ['Others']
 
 
 def getMaxAndMinDayFromAssignee(project,table="WitsAssignee"):
@@ -504,16 +503,16 @@ def getCountAndDetailFromAssignee(project,fromtodate="current",table="WitsAssign
 		if len(dataDict[aa]["Category [LocFunctional]"]["id"]) == 0:
 			locFunclist.append("")
 		else:
-			temp = "radar://problem/" + "&".join(dataDict[aa]["Others"]["id"])
+			temp = "radar://problem/" + "&".join(dataDict[aa]["Category [LocFunctional]"]["id"])
 			locFunclist.append(temp)
 		if len(dataDict[aa]["Category [TransEngineering]"]["id"]) == 0:
 			engineerlist.append("")
 		else:
-			temp = "radar://problem/" + "&".join(dataDict[aa]["Others"]["id"])
+			temp = "radar://problem/" + "&".join(dataDict[aa]["Category [TransEngineering]"]["id"])
 			engineerlist.append(temp)
 	
 	return {"Language":langlist,"LocFunc":locFunccount,"AutoLoc":autocount,"Translation":translationcount,"Layout":layoutcount,"Engineer":engineercount,"Others":otherscount},{"Language":langlist,"LocFunc":locFunclist,"AutoLoc":autolist,"Translation":translationlist,"Layout":layoutlist,"Engineer":engineerlist,"Others":otherslist}
 
 
-# print getCountAndDetailFromAssignee("OSX","2011-01-01~2016-01-01")
+print getCountAndDetailFromAssignee("OSX","2011-01-01~2016-01-01")
 

@@ -8,6 +8,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 sys.path.append(os.path.dirname(__file__))
 import bodyRequest, handledata
+from RadarArgs import RadarArgs
 from email.mime.text import MIMEText
 
 pyScript = os.path.dirname(__file__)
@@ -26,23 +27,10 @@ handledata.createtable(activeDB, 0, table='DailyActive')
 handledata.createtable(activeDB, 2, table='DailyCount')
 handledata.createtable(activeDB, -1, table='WitsAssignee')
 
-coveredProj = ['ARD', 'OSX', 'OSX Updates', {'FCP':['Final Cut Pro', 'Compressor', 'Motion']},
-	{'iWork':['Pages', 'Numbers', 'Keynote', 'iWork']}, 'Spark', 'Server OSX', 'CPU', 'Logic',
-	'iTunes Mac', 'iTunes Win', 'Aperture', 'iMovie', 'iBooks Author', 'iCloud CP Win', 'iPhoto',
-	'ACUtil', 'MainStage', 'Safari Mac', 'iTunesProducer', 'QuickTime Mac', 'QuickTime Windows',
-	'AirPort Mac', 'AirPort Win', 'Java'] # Loc:Proj:OSX Updates
-languages = ['AB', 'All', 'Asia', 'BR', 'CA', 'CH', 'CR', 'CZ', 'D', 'E', 'DK', 'FU', 'Euro', 'GR', 'H',
-		'HB', 'ID', 'IntlFunct', 'J', 'K', 'KH', 'MG', 'MX', 'MY', 'N', 'PL', 'PO', 'RO', 'RS',
-		'S', 'SL', 'T', 'TA', 'TH', 'TU', 'UA', 'VN'] # For multiProcess when more than 2000 bugs in single process
-witsMembers = {'asu':[298353849, 298353860, 298349189],
-	'chao':[297769743, 2974369755, 297769786],
-	'emily':[1181594352, 1181596433, 1181597020],
-	'jason':[180797426, 180797506, 180797597],
-	'match':[1339249772, 1339250978, 1339251608],
-	'nancy':[1431543992, 1431545397, 1431546129],
-	'paul':[95573342, 95830498, 154104216],
-	'tiny':[1339239788, 1339240651, 1339241408]}
-keywords = ['Category [LocFunctional]', 'AutoLoc [Investigate]', 'Category [Translation]', 'Category [HI/Layout]', 'Category [TransEngineering]']
+coveredProj = RadarArgs.coveredProj # Loc:Proj:OSX Updates
+languages = RadarArgs.languages # For multiProcess when more than 2000 bugs in single process
+witsMembers = RadarArgs.witsMembers
+keywords = RadarArgs.keywords
 
 def mailtoLeaders(leaders, subject, content):
 	msg = MIMEText(content)
@@ -290,7 +278,7 @@ def witsActive(DailyActiveDB, proj, projKeyword):
 	for bug in currentRadarIDs:
 		handledata.updatedata2(DailyActiveDB, bug, 'Others')
 
-witsActive(activeDB, 'OSX', keywords)
+# witsActive(activeDB, 'OSX', keywords)
 
 for proj in coveredProj:
 	projDB, projFolder, logs = projectFrame(proj)
