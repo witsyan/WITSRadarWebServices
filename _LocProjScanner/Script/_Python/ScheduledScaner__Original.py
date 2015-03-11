@@ -76,7 +76,11 @@ def lastModifiedAt(advance=7):
 	return lastWeek.isoformat()
 
 times = 0
-coveredProj = RadarArgs.coveredProj # Loc:Proj:OSX Updates
+coveredProj = ['ARD', 'OSX', 'OSX Updates', 'Final Cut Pro', 'Compressor', 'Motion',
+		'Pages', 'Numbers', 'Keynote', 'iWork', 'Spark', 'Server OSX', 'CPU', 'Logic',
+		'iTunes Mac', 'iTunes Win', 'Aperture', 'iMovie', 'iBooks Author', 'iCloud CP Win', 'iPhoto',
+		'ACUtil', 'MainStage', 'Safari Mac', 'iTunesProducer', 'QuickTime Mac', 'QuickTime Windows',
+		'AirPort Mac', 'AirPort Win', 'Java'] # Loc:Proj:OSX Updates
 
 while True:
 	for proj in coveredProj:
@@ -88,7 +92,7 @@ while True:
 				{'name':LocProj,'version':"ID"},
 				{'name':LocProj,'version':"VN"},
 				{'name':LocProj,'version':"MY"}],
-			'lastModifiedAt':{'gt':'2015-01-01T16:00:00'}}
+			'lastModifiedAt':{'gt':'2015-03-01T16:00:00'}}
 		if times:
 			RequestBodyComponents['lastModifiedAt']['gt'] = '%sT16:00:00'%lastModifiedAt()
 		t, r, l = projectFrame(proj.replace(' ', '_'))
@@ -126,49 +130,3 @@ while True:
 	sys.exit()
 	time.sleep(900)
 
-
-{'status': 'Complete', 
-'applicationName': None, 
-'scheduledEndDate': '2015-01-02T12:00:00+0000', 
-'scheduledStartDate': '2014-12-24T12:00:00+0000', 
-'trackName': 'Localization', 
-'title': '[OS X 10.10.3 SW][LocQA 1]', 
-'geography': 'Hong Kong', 
-'component': {'version': 'CH', 'name': 'Loc:Proj:OSX Updates'}, 
-'lastModifiedAt': '2015-01-02T03:05:55+0000', 
-'currentTester': {'lastName': None, 'type': None, 'email': None, 'firstName': None, 'dsid': None}, 
-'priority': 5, 
-'owner': {'lastName': 'Au-Yeung', 'type': None, 'email': None, 'firstName': 'Stanley', 'dsid': 5803069}, 
-'complexity': None, 
-'suiteID': 750706, 
-'testCycle': None, 
-'keywords': [], 
-'scheduledID': 2598020, 
-'category': 'SW Localization QA', 
-'createdAt': '2014-12-24T02:20:00+0000'}
-
-# "cases":[{"summary":null,
-# "testSuiteCaseID":13399864,
-# "tester":{"lastName":"Yu","email":"lex@beyondtech.co.kr","type":"External","firstName":"Lex","dsid":1858620524},
-# "reviewFlag":false,
-# "keywords":[],
-# "buildID":null,
-# "instructions":"1. Computer restarts successfully and goes to the Welcome panel of MacBuddy.\n2. Run with MacBuddy, check these cases:\n- with Internet connection\n- without Internet connection",
-# "status":"Fail",
-# "actualResult":null,
-# "data":null,
-# "expectedTime":"0000:15:00",
-# "build":null,
-# "caseNumber":4,
-# "title":"After installation, restart and run with MacBuddy (Only for InstallAssistant)",
-# "relatedProblems":[{"id":19358090,"title":"[MacBuddyX] KH: 14D55: Account name is not generated based on Korean Username",
-# 	"relationType":"related to",
-# 	"component":{"name":"Loc:Proj:OSX Updates","version":"KH"},
-# 	"state":"Analyze"}],
-# "actualTime":"0000:15:00",
-# "priority":2,
-# "expectedResult":"Check different workflow with these cases.",
-# "createdAt":"2014-12-24T02:21:02+0000",
-# "caseID":28691127,
-# "counts":{"pictureCount":0,"attchmentCount":0},
-# "lastModifiedAt":"2014-12-30T03:19:18+0000"}]
