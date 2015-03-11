@@ -108,16 +108,16 @@ def projList(folder=TSTTpath, weekly=0):
 		start = dateToWeek(testSuite.sDate, weekly)
 		end = dateToWeek(testSuite.eDate, weekly)
 
-		if testSuite.project not in tmpList and start:
+		if testSuite.project not in tmpList and start != None:
 			tmpList.append(testSuite.project)
-			listToDjango.append([[0, 6, len(tmpList)-1, testSuite.project]])
+			listToDjango.append([[0, 6, 1, testSuite.project]])
 			listToDjango[-1].append([start,
 						end,
 						0,
 						testSuite.QACycle,
 						testSuite.percentage,
 						TSTTDetial(testSuite.schedules)])
-		elif start:
+		elif start != None:
 			locate = tmpList.index(testSuite.project)
 			listToDjango[locate][0][2] += 1
 			listToDjango[locate].append([start,
