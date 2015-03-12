@@ -84,7 +84,7 @@ def getTSTTList(folder):
 				TSTTList.append(os.path.join(_TestSuite, file))
 	return TSTTList
 
-def weekToDate(week=0):
+def weekToDate(week=0): #0 表示本周 ，－1 表示上一周，会根据输入的数字返回对应星期周一到周日的日期（2015-03-12）
 	today = today = datetime.date.today()
 	Mon = today + datetime.timedelta(days=7*week-today.weekday())
 	Tue = Mon + datetime.timedelta(days=1)
@@ -111,7 +111,7 @@ def TSTTDetial(scheduleDict):
 
 TSTTpath = os.path.dirname(__file__)[:-12] + '_LocProjScanner/_ScheduleProjects'
 
-def projList(folder=TSTTpath, weekly=0):
+def projList(folder=TSTTpath, weekly=0): # weekly 与 weekToDate() 中的 week 值对应，返回所选星期的 TSTT 项目，按照 0-6 排列
 	listToDjango = []; tmpList = []
 	TSTTs = getTSTTList(folder)
 	for i in TSTTs:
