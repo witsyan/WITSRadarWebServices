@@ -8,13 +8,12 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 class TSTT:
-	schedules = {}
 	sDate = ''
 	eDate = ''
 	project = ''
 	QACycle = ''
-
 	def __init__(self, TSTTFolder):
+		self.schedules = {}
 		self.id = os.path.basename(TSTTFolder)
 		for file in os.listdir(TSTTFolder):
 			if file.isdigit():

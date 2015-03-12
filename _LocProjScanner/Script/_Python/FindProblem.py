@@ -153,6 +153,7 @@ def multiProcess(proj, langs=[], ids=[], process=0): # to catpure bugs when more
 			total += tmp
 		else:
 			print '\n\n## Empty content.\n'
+			return []
 		if os.path.isfile(file):
 			os.remove(file)
 	return total
