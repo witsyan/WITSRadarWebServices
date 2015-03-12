@@ -84,6 +84,17 @@ def getTSTTList(folder):
 				TSTTList.append(os.path.join(_TestSuite, file))
 	return TSTTList
 
+def weekToDate(week=0):
+	today = today = datetime.date.today()
+	Mon = today + datetime.timedelta(days=7*week-today.weekday())
+	Tue = Mon + datetime.timedelta(days=1)
+	Wed = Mon + datetime.timedelta(days=2)
+	Thurs = Mon + datetime.timedelta(days=3)
+	Fri = Mon + datetime.timedelta(days=4)
+	Sat = Mon + datetime.timedelta(days=5)
+	Sun = Mon + datetime.timedelta(days=6)
+	return Mon.isoformat(), Tue.isoformat(), Wed.isoformat(), Thurs.isoformat(), Fri.isoformat(), Sat.isoformat(), Sun.isoformat()
+
 def dateToWeek(date, weekly=0): # 0: this week, 1: 1 week later, -1: 1 week early
 	today = datetime.date.today() + datetime.timedelta(days=7*weekly)
 	for n in range(7):

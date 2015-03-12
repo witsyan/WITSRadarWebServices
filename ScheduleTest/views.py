@@ -20,7 +20,8 @@ sys.setdefaultencoding("utf-8")
 
 def ScheduleTest(request):
     projects = projList()
-    return render_to_response('ScheduleTest.html',{"projects":projects, "CHeight":getHseight(projects), "BHeight":getHseight(projects) + 4,},)
+    weekly = weekToDate()
+    return render_to_response('ScheduleTest.html',{"projects":projects, "CHeight":getHseight(projects), "BHeight":getHseight(projects) + 4, "weekly":weekly},)
 
 #参照 ScheduleTest.js function getHseight()
 def getHseight(ps):
