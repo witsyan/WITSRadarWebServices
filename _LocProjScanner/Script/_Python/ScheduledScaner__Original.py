@@ -40,20 +40,49 @@ def creatAsiaRequestBodyFiles(Folder, contents=list):
 		fileList.append(requestBody)
 	return fileList
 
-def useAPI(command, requestBoday='', ScheduleID=''):
-	response = subprocess.Popen('%s %s %s'%(command, requestBoday, ScheduleID), shell=True, stdout=subprocess.PIPE).stdout.read()
-	if response.strip()[-1] == ']':
+def useAPI(command, RequestBody='', ScheduleID=''): # use sh script to capture bugs from Radar web service
+	response = subprocess.Popen('%s %s %s'%(command, RequestBody, ScheduleID), shell=True, stdout=subprocess.PIPE).stdout.read()
+	if -1 < response.find('[') < response.find('{') or response.find('{') == -1:
 		try:
 			json = re.findall('\[[\w\W]+\]', response)[-1]
 		except:
+			t = ''
+			if RequestBody:
+				t = open(RequestBody).read()
+			if re.findall('\[[\w\W]+\]', response):
+				open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(0): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), t, ScheduleID, response))
 			return []
 	else:
 		try:
 			json = re.findall('\{[\w\W]+\}', response)[-1]
+			if '409 Conflict' in json:
+				open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(1): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, ScheduleID, json))
+				return 'overflow'
+			elif '401 Unauthorized' in json:
+				print '\nRadar is unable to authenticate your account because IdMS has experienced an error.\n'
+				print 'Please try to reset the password in %s.'%command
+				# sys.exit()
+				return []
+			# print '## Dict Model:\n%s\n'%json
+			# return []
 		except IndexError, e:
 			print '%s\n%s'%(e, response)
-			return
-	return simplejson.loads(json)
+			t = ''
+			if RequestBody:
+				t = open(RequestBody).read()
+			open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(2): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), t, ScheduleID, response))
+			return []
+	try:
+		result = simplejson.loads(json)
+	except:
+		t = ''
+		if RequestBody:
+			t = open(RequestBody).read()
+		open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(3): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), t, ScheduleID, json))
+		return []
+	if len(result) == 2000:
+		return 'overflow'
+	return result
 
 def creatLocFilesbyID(ScheduledTest, targetFolder):
 	TestSuite = os.path.join(targetFolder, str(ScheduledTest['suiteID']))
@@ -92,7 +121,7 @@ while True:
 				{'name':LocProj,'version':"ID"},
 				{'name':LocProj,'version':"VN"},
 				{'name':LocProj,'version':"MY"}],
-			'lastModifiedAt':{'gt':'2015-03-01T16:00:00'}}
+			'lastModifiedAt':{'gt':'2015-03-08T16:00:00'}}
 		if times:
 			RequestBodyComponents['lastModifiedAt']['gt'] = '%sT16:00:00'%lastModifiedAt()
 		t, r, l = projectFrame(proj.replace(' ', '_'))
@@ -100,7 +129,9 @@ while True:
 		s = []
 		for body in b:
 			print '\n%s - %s ...'%(proj, os.path.basename(body))
-			s += useAPI(FindScheduledTest, body)
+			tmp = useAPI(FindScheduledTest, body)
+			if isinstance(tmp, list):
+				s += tmp
 
 		total = len(s)
 		for unit in s:
@@ -126,7 +157,6 @@ while True:
 				creatLocFilesbyID(unit, t)
 			total -= 1
 	times = 1
-	print '\n%s\nFinished, process will restart after 15 minutes.\n'%time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-	sys.exit()
-	time.sleep(900)
+	print '\n%s\nFinished, process will restart after 60 minutes.\n'%time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+	time.sleep(3600)
 

@@ -15,24 +15,10 @@ def creatPersonalBodyRequest(bugID, keywords=[], idsOnly=True):
 	bodyRequestModel = {
 		'idsOnly':idsOnly,
 		'id':bugID}
-		# 'lastModifiedAt':{'gt':'2010-01-01T16:00:00'}}
-		# 'keyword':{'any':keywordList}
-	# if isinstance(proj, dict):
-	# 	for p in proj.values()[0]:
-	# 		for p in proj.values()[0]:
-	# 			projDetials = {'name':'Loc:Proj:%s'%p}
-	# 			bodyRequestModel['component'].append(projDetials)
-	# else:
-	# 	bodyRequestModel['component'] = {'name':'Loc:Proj:%s'%proj}
-	# bodyRequestModel['lastModifiedAt']['gt'] = '%sT16:00:00'%lastModifiedAt(7)
-	# bodyFileList.append(simplejson.dumps(bodyRequestModel))
 	for keyword in keywords:
 		bodyRequestModel['keyword'] = keyword
 		bodyFileList.append(simplejson.dumps(bodyRequestModel))
 	return bodyFileList
-
-# s = creatPersonalBodyRequest('OS X', AccountIDs['tiny'], keywords[0])[1]
-# open('/Users/admin/Desktop/a.txt', 'w').write(s)
 
 def creatBodyRequest(proj, langs=[], stateList=['Analyze', 'Integrate', 'Build', 'Verify'], idsOnly=False):
 	bodyRequestModel = {'component':[],

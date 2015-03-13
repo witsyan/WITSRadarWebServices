@@ -67,8 +67,9 @@ def useAPI(command, RequestBody='', ids=''): # use sh script to capture bugs fro
 				print '\nRadar is unable to authenticate your account because IdMS has experienced an error.\n'
 				print 'Please try to reset the password in %s.'%command
 				# sys.exit()
-				return []
+				# return []
 			print '## Dict Model:\n%s\n'%json
+			mailtoLeaders('tinyliu@me.com', 'nRadar is unable to authenticate your account because IdMS has experienced an error.', '%s - %s\n%s'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, response))
 			return []
 		except IndexError, e:
 			print '%s\n%s'%(e, response)
