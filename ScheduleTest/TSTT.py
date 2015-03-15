@@ -25,6 +25,8 @@ class TSTT:
 				if not self.sDate:
 					self.sDate, self.eDate, self.project, self.QACycle = schedule[:4]
 		self.percentage = self.totalPercentage()
+		if scheduleDict['status'] == 'Complete':
+			self.percentage += 'C'
 
 	def readLocFilebyID(self, locFile):
 		contents = open(locFile).read()
@@ -45,7 +47,8 @@ class TSTT:
 			project, locQACycle = projectInfo
 		else:
 			project = '[%s]'%scheduleDict['component']['name'][9:]
-			locQACycle = '[External]'
+			locQACycle = scheduleDict['title'][scheduleDict['title'].lower().rfind('locqa'):]
+			locQACycle = locQACycle if len(locQACycle) > 1 else '[Undefined]'
 		PassedPercentage, relatedProblems = self.casesCalculater(scheduleDict['cases'])
 		status = scheduleDict['status']
 		return sDate, eDate, project, locQACycle, PassedPercentage, status, relatedProblems, lang
@@ -56,7 +59,7 @@ class TSTT:
 		relatedProblems = ''
 		for case in casesList:
 			totalTimes += self.formatToMins(case['expectedTime'])
-			if case['status'] == 'Pass':
+			if case['status'] == 'Pass' or case['status'] == 'N/A':
 				PassTimes += self.formatToMins(case['expectedTime'])
 				PassCases += 1
 

@@ -63,13 +63,13 @@ def useAPI(command, RequestBody='', ids=''): # use sh script to capture bugs fro
 			if '409 Conflict' in json:
 				open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nids: %s\nContents(1): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, ids, json))
 				return 'overflow'
-			elif '401 Unauthorized' in json:
+			elif 'Please enter your Apple ID and password' in json:
 				print '\nRadar is unable to authenticate your account because IdMS has experienced an error.\n'
 				print 'Please try to reset the password in %s.'%command
-				# sys.exit()
-				# return []
+				mailtoLeaders('tinyliu@me.com', 'Radar is unable to authenticate your account because IdMS has experienced an error.', '%s - %s\n%s'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, response))
+				sys.exit()
 			print '## Dict Model:\n%s\n'%json
-			mailtoLeaders('tinyliu@me.com', 'nRadar is unable to authenticate your account because IdMS has experienced an error.', '%s - %s\n%s'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, response))
+			mailtoLeaders('tinyliu@me.com', 'Radar is unable to authenticate your account because IdMS has experienced an error.', '%s - %s\n%s'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, response))
 			return []
 		except IndexError, e:
 			print '%s\n%s'%(e, response)
@@ -291,7 +291,7 @@ for proj in coveredProj:
 		activeCountDetial(projDataBase, activeDB, allbugs, firstRun=True)
 	else:
 		print '\nPassing %s ...'%os.path.basename(projFolder)
-		time.sleep(1)
+		time.sleep(0.5)
 		
 today = datetime.date.today(); times = 1
 sunday = today + datetime.timedelta(days=6-today.weekday())

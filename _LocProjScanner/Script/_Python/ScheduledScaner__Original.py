@@ -105,7 +105,7 @@ def lastModifiedAt(advance=7):
 	return lastWeek.isoformat()
 
 times = 0
-coveredProj = ['ARD', 'OSX', 'OSX Updates', 'Final Cut Pro', 'Compressor', 'Motion',
+coveredProj = ['ARD', 'OSX', 'Final Cut Pro', 'Compressor', 'Motion',
 		'Pages', 'Numbers', 'Keynote', 'iWork', 'Spark', 'Server OSX', 'CPU', 'Logic',
 		'iTunes Mac', 'iTunes Win', 'Aperture', 'iMovie', 'iBooks Author', 'iCloud CP Win', 'iPhoto',
 		'ACUtil', 'MainStage', 'Safari Mac', 'iTunesProducer', 'QuickTime Mac', 'QuickTime Windows',
@@ -147,13 +147,13 @@ while True:
 						unit["cases"] = ScheduleCase["cases"]
 						creatLocFilesbyID(unit, t)
 					except:
-						print '\n\n## TimeOut.\n'
+						print '\n\n## TimeOut.\n%s'%ScheduleCase
 			else:
 				ScheduleCase = useAPI(GetScheduleTestDataCase, ScheduleID=unit['scheduledID'])
 				try:
 					unit["cases"] = ScheduleCase["cases"]
 				except:
-					print ScheduleCase
+					print '\n\n## TimeOut.\n%s'%ScheduleCase
 				creatLocFilesbyID(unit, t)
 			total -= 1
 	times = 1

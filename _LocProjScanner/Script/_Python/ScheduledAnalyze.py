@@ -24,7 +24,7 @@ def casesCalculater(casesList):
 	relatedProblems = ''
 	for case in casesList:
 		totalTimes += formatToMins(case['expectedTime'])
-		if case['status'] == 'Pass':
+		if case['status'] == 'Pass' or case['status'] == 'N/A':
 			PassTimes += formatToMins(case['expectedTime'])
 			PassCases += 1
 
@@ -49,7 +49,8 @@ def scheduleAnalyze(scheduleDict):
 		project, locQACycle = projectInfo
 	else:
 		project = '[%s]'%scheduleDict['component']['name'][9:]
-		locQACycle = '[External]'
+		locQACycle = scheduleDict['title'][scheduleDict['title'].lower().rfind('locqa'):]
+		locQACycle = locQACycle if len(locQACycle) > 1 else '[Undefined]'
 	# print scheduleDict['scheduledID']
 	PassedPercentage, relatedProblems = casesCalculater(scheduleDict['cases'])
 	status = scheduleDict['status']
