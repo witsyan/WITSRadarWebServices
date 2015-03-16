@@ -1,0 +1,42 @@
+<script type="text/javascript">
+var projects = {{ projects | safe }};
+</script>
+<body>
+
+<table border="0" align="center" width = 1404>
+<tr>
+<td colspan="7" style="background-color:#99bbbb;text-align:center;">
+<table>
+<form name="seleckweekly" action="/ScheduleTestseleckweekly/" method="get"><input type="submit" value="Last week" /><input type="text" name="seleckweekly" value="-1" hidden /></form>
+<form name="seleckweekly" action="/ScheduleTestseleckweekly/" method="get"><input type="submit" value="This week" /><input type="text" name="seleckweekly" value="0" hidden /></form>
+<form name="seleckweekly" action="/ScheduleTestseleckweekly/" method="get"><input type="submit" value="Next week" /><input type="text" name="seleckweekly" value="1" hidden /></form>
+</table>
+</td>
+</tr>
+</table>
+
+<table border="0" align="center" width = 1400>
+<tr>
+{% for day in weekly %}
+<td width = 198 align = "center" style="background-color:#ADD8E6;"><font size=2 face="Helvetica">{{ day }}</td>
+{% endfor %}
+</tr>
+<tr>
+<td style="background-color:#EEEEEE;height:{% if BHeight > 600 %}600{% else %}{{ BHeight }}{% endif %}px;text-align:top;" colspan = "7">
+<div style="width:1400; height:{% if BHeight > 600 %}600{% else %}{{ BHeight }}{% endif %}px; overflows:scroll; overflow-x:hidden;">
+<canvas id='canvas' width='1400' height='{{ CHeight }}'>
+Canvas not supported
+</canvas>
+</div>
+    <script src = '/static/admin/js/sprites.js'></script>
+    <script src = '/static/admin/js/shapes.js'></script>
+<script src = '/static/admin/js/ScheduleTest.js'></script>
+</td>
+</tr>
+</table>
+<table border="0" align="center" width = 1400>
+<td style="background-color:#EEEEEE;text-align:top;"  colspan = "7">
+<iframe src="/ScheduleTestselect/" id ="iframe_a" name="iframe_a" width="100%" height=220 frameborder="0"></iframe>
+</td>
+</table>
+</body>
