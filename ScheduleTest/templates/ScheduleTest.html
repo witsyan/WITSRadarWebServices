@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<title>TSTT</title>
+<style type="text/css">
+      #canvas {
+         background: #ADD8E6;
+         -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+         -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+         box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+      }
+      
+</style>
+<script type="text/javascript">
+var projects = {{ projects | safe }};
+</script>
+<body>
+<iframe src="/ScheduleTestseleckweekly/?select_weeks={{ select_weeks }}" name="iframe_s" width="100%" height="950" frameborder="0"></iframe>
+</body>
+</html>
