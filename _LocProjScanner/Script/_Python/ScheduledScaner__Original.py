@@ -16,6 +16,7 @@ shScript = pyScript[:pyScript.find('_Python')] + '_sh'
 
 FindScheduledTest = '%s/FindScheduledTest.sh'%shScript
 GetScheduleTestDataCase = '%s/GetScheduleTestData.sh'%shScript
+errorLogsFile = '%s/_errors.txt'%projectFolder
 
 def creatLocDirs(locDirs):
 	try:
@@ -40,20 +41,49 @@ def creatAsiaRequestBodyFiles(Folder, contents=list):
 		fileList.append(requestBody)
 	return fileList
 
-def useAPI(command, requestBoday='', ScheduleID=''):
-	response = subprocess.Popen('%s %s %s'%(command, requestBoday, ScheduleID), shell=True, stdout=subprocess.PIPE).stdout.read()
-	if response.strip()[-1] == ']':
+def useAPI(command, RequestBody='', ScheduleID=''): # use sh script to capture bugs from Radar web service
+	response = subprocess.Popen('%s %s %s'%(command, RequestBody, ScheduleID), shell=True, stdout=subprocess.PIPE).stdout.read()
+	if -1 < response.find('[') < response.find('{') or response.find('{') == -1:
 		try:
 			json = re.findall('\[[\w\W]+\]', response)[-1]
 		except:
+			t = ''
+			if RequestBody:
+				t = open(RequestBody).read()
+			if re.findall('\[[\w\W]+\]', response):
+				open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(0): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), t, ScheduleID, response))
 			return []
 	else:
 		try:
 			json = re.findall('\{[\w\W]+\}', response)[-1]
+			if '409 Conflict' in json:
+				open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(1): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, ScheduleID, json))
+				return 'overflow'
+			elif '401 Unauthorized' in json:
+				print '\nRadar is unable to authenticate your account because IdMS has experienced an error.\n'
+				print 'Please try to reset the password in %s.'%command
+				# sys.exit()
+				return []
+			# print '## Dict Model:\n%s\n'%json
+			# return []
 		except IndexError, e:
 			print '%s\n%s'%(e, response)
-			return
-	return simplejson.loads(json)
+			t = ''
+			if RequestBody:
+				t = open(RequestBody).read()
+			open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(2): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), t, ScheduleID, response))
+			return []
+	try:
+		result = simplejson.loads(json)
+	except:
+		t = ''
+		if RequestBody:
+			t = open(RequestBody).read()
+		open(errorLogsFile, 'a').write('Date: %s\nRequestBody: %s\nScheduleID: %s\nContents(3): %s\n\n'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), t, ScheduleID, json))
+		return []
+	if len(result) == 2000:
+		return 'overflow'
+	return result
 
 def creatLocFilesbyID(ScheduledTest, targetFolder):
 	TestSuite = os.path.join(targetFolder, str(ScheduledTest['suiteID']))
@@ -76,7 +106,11 @@ def lastModifiedAt(advance=7):
 	return lastWeek.isoformat()
 
 times = 0
-coveredProj = RadarArgs.coveredProj # Loc:Proj:OSX Updates
+coveredProj = ['ARD', 'OSX', 'Final Cut Pro', 'Compressor', 'Motion',
+		'Pages', 'Numbers', 'Keynote', 'iWork', 'Spark', 'Server OSX', 'CPU', 'Logic',
+		'iTunes Mac', 'iTunes Win', 'Aperture', 'iMovie', 'iBooks Author', 'iCloud CP Win', 'iPhoto',
+		'ACUtil', 'MainStage', 'Safari Mac', 'iTunesProducer', 'QuickTime Mac', 'QuickTime Windows',
+		'AirPort Mac', 'AirPort Win', 'Java'] # Loc:Proj:OSX Updates
 
 while True:
 	for proj in coveredProj:
@@ -88,7 +122,7 @@ while True:
 				{'name':LocProj,'version':"ID"},
 				{'name':LocProj,'version':"VN"},
 				{'name':LocProj,'version':"MY"}],
-			'lastModifiedAt':{'gt':'2015-01-01T16:00:00'}}
+			'lastModifiedAt':{'gt':'2015-03-08T16:00:00'}}
 		if times:
 			RequestBodyComponents['lastModifiedAt']['gt'] = '%sT16:00:00'%lastModifiedAt()
 		t, r, l = projectFrame(proj.replace(' ', '_'))
@@ -96,7 +130,9 @@ while True:
 		s = []
 		for body in b:
 			print '\n%s - %s ...'%(proj, os.path.basename(body))
-			s += useAPI(FindScheduledTest, body)
+			tmp = useAPI(FindScheduledTest, body)
+			if isinstance(tmp, list):
+				s += tmp
 
 		total = len(s)
 		for unit in s:
@@ -112,63 +148,16 @@ while True:
 						unit["cases"] = ScheduleCase["cases"]
 						creatLocFilesbyID(unit, t)
 					except:
-						print '\n\n## TimeOut.\n'
+						print '\n\n## TimeOut.\n%s'%ScheduleCase
 			else:
 				ScheduleCase = useAPI(GetScheduleTestDataCase, ScheduleID=unit['scheduledID'])
 				try:
 					unit["cases"] = ScheduleCase["cases"]
 				except:
-					print ScheduleCase
+					print '\n\n## TimeOut.\n%s'%ScheduleCase
 				creatLocFilesbyID(unit, t)
 			total -= 1
 	times = 1
-	print '\n%s\nFinished, process will restart after 15 minutes.\n'%time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-	sys.exit()
-	time.sleep(900)
+	print '\n%s\nFinished, process will restart after 60 minutes.\n'%time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+	time.sleep(3600)
 
-
-{'status': 'Complete', 
-'applicationName': None, 
-'scheduledEndDate': '2015-01-02T12:00:00+0000', 
-'scheduledStartDate': '2014-12-24T12:00:00+0000', 
-'trackName': 'Localization', 
-'title': '[OS X 10.10.3 SW][LocQA 1]', 
-'geography': 'Hong Kong', 
-'component': {'version': 'CH', 'name': 'Loc:Proj:OSX Updates'}, 
-'lastModifiedAt': '2015-01-02T03:05:55+0000', 
-'currentTester': {'lastName': None, 'type': None, 'email': None, 'firstName': None, 'dsid': None}, 
-'priority': 5, 
-'owner': {'lastName': 'Au-Yeung', 'type': None, 'email': None, 'firstName': 'Stanley', 'dsid': 5803069}, 
-'complexity': None, 
-'suiteID': 750706, 
-'testCycle': None, 
-'keywords': [], 
-'scheduledID': 2598020, 
-'category': 'SW Localization QA', 
-'createdAt': '2014-12-24T02:20:00+0000'}
-
-# "cases":[{"summary":null,
-# "testSuiteCaseID":13399864,
-# "tester":{"lastName":"Yu","email":"lex@beyondtech.co.kr","type":"External","firstName":"Lex","dsid":1858620524},
-# "reviewFlag":false,
-# "keywords":[],
-# "buildID":null,
-# "instructions":"1. Computer restarts successfully and goes to the Welcome panel of MacBuddy.\n2. Run with MacBuddy, check these cases:\n- with Internet connection\n- without Internet connection",
-# "status":"Fail",
-# "actualResult":null,
-# "data":null,
-# "expectedTime":"0000:15:00",
-# "build":null,
-# "caseNumber":4,
-# "title":"After installation, restart and run with MacBuddy (Only for InstallAssistant)",
-# "relatedProblems":[{"id":19358090,"title":"[MacBuddyX] KH: 14D55: Account name is not generated based on Korean Username",
-# 	"relationType":"related to",
-# 	"component":{"name":"Loc:Proj:OSX Updates","version":"KH"},
-# 	"state":"Analyze"}],
-# "actualTime":"0000:15:00",
-# "priority":2,
-# "expectedResult":"Check different workflow with these cases.",
-# "createdAt":"2014-12-24T02:21:02+0000",
-# "caseID":28691127,
-# "counts":{"pictureCount":0,"attchmentCount":0},
-# "lastModifiedAt":"2014-12-30T03:19:18+0000"}]

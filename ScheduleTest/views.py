@@ -10,6 +10,7 @@ from django import forms
 from django.db.models import Q
 from django.forms import forms
 from django import template, shortcuts
+from ScheduleTest.TSTT import *
 
 import json
 import os, sys, datetime
@@ -18,24 +19,10 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 def ScheduleTest(request):
-    projects = [
-      [
-        [0, 6, 2, "OS X 10.10.2 SW", ],
-        [0, 0, 0, 'LocQA OTR,', '93.94%', ],
-        [1, 1, 1, 'LocQA OTR1,', '100%', ],
-      ],
-      [
-        [0, 6, 2, "OS X 10.10.3 SW", ],
-        [0, 0, 0, 'LocQA 1,', '100%', ],
-        [1, 3, 1, 'LocQA 2', '77%', ]
-      ],
-      [
-        [0, 6, 2, "ARD", ],
-        [0, 1, 0, 'External,', '100%', ],
-        [1, 3, 1, 'PkgData LocQA4', '77%', ]
-      ],
-    ];
-    return render_to_response('ScheduleTest.html',{"projects":projects, "CHeight":getHseight(projects), "BHeight":getHseight(projects) + 4,},)
+    select_weeks = 0
+    projects = projList(weekly=select_weeks)
+    weekly = weekToDate(select_weeks)
+    return render_to_response('ScheduleTest.html',{"projects":projects, "CHeight":getHseight(projects), "BHeight":getHseight(projects) + 4, "weekly":weekly},)
 
 #参照 ScheduleTest.js function getHseight()
 def getHseight(ps):

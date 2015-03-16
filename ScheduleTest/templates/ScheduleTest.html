@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>title</title>
+<title>TSTT</title>
 <style type="text/css">
       #canvas {
          background: #ADD8E6;
@@ -17,13 +17,9 @@ var projects = {{ projects | safe }};
 
 <table border="0" align="center" width = 1400>
 <tr >
-<td width = 198 align = "center" style="background-color:#ADD8E6;">0</td>
-<td width = 198 align = "center" style="background-color:#ADD8E6;">1</td>
-<td width = 198 align = "center" style="background-color:#ADD8E6;">2</td>
-<td width = 198 align = "center" style="background-color:#ADD8E6;">3</td>
-<td width = 198 align = "center" style="background-color:#ADD8E6;">4</td>
-<td width = 198 align = "center" style="background-color:#ADD8E6;">5</td>
-<td width = 198 align = "center" style="background-color:#ADD8E6;">6</td>
+{% for day in weekly %}
+<td width = 198 align = "center" style="background-color:#ADD8E6;"><font size=2 face="Helvetica">{{ day }}</td>
+{% endfor %}
 </tr>
 <tr>
 <td style="background-color:#EEEEEE;height:{% if BHeight > 600 %}600{% else %}{{ BHeight }}{% endif %}px;text-align:top;" colspan = "7">
