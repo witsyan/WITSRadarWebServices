@@ -123,7 +123,7 @@ def projList(folder=TSTTpath, weekly=0): # weekly 与 weekToDate() 中的 week �
 
 		if testSuite.project not in tmpList and start != None:
 			tmpList.append(testSuite.project)
-			listToDjango.append([[0, 6, 1, testSuite.project]])
+			listToDjango.append([[0, 6, 1, testSuite.project, testSuite.id]])
 			listToDjango[-1].append([start,
 						end,
 						0,

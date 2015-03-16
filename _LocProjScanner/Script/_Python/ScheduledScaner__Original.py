@@ -16,6 +16,7 @@ shScript = pyScript[:pyScript.find('_Python')] + '_sh'
 
 FindScheduledTest = '%s/FindScheduledTest.sh'%shScript
 GetScheduleTestDataCase = '%s/GetScheduleTestData.sh'%shScript
+errorLogsFile = '%s/_errors.txt'%projectFolder
 
 def creatLocDirs(locDirs):
 	try:
