@@ -123,12 +123,13 @@ def projList(folder=TSTTpath, weekly=0): # weekly 与 weekToDate() 中的 week �
 
 		if testSuite.project not in tmpList and start != None:
 			tmpList.append(testSuite.project)
-			listToDjango.append([[0, 6, 1, testSuite.project, testSuite.id]])
+			listToDjango.append([[0, 6, 1, testSuite.project]])
 			listToDjango[-1].append([start,
 						end,
 						0,
 						testSuite.QACycle,
 						testSuite.percentage,
+						testSuite.id,
 						TSTTDetial(testSuite.schedules)])
 		elif start != None:
 			locate = tmpList.index(testSuite.project)
@@ -138,8 +139,15 @@ def projList(folder=TSTTpath, weekly=0): # weekly 与 weekToDate() 中的 week �
 						len(listToDjango[locate]) - 1,
 						testSuite.QACycle,
 						testSuite.percentage,
+						testSuite.id,
 						TSTTDetial(testSuite.schedules)])
 	return listToDjango
+
+def singleTestSuite(TSTTid, folder=TSTTpath):
+	for dir in os.listdir(folder):
+		if os.path.isdir('%s/%s/_TestSuite/%s'%(folder, dir, TSTTid)):
+			testSuite = TSTT('%s/%s/_TestSuite/%s'%(folder, dir, TSTTid))
+			return testSuite.project, testSuite.QACycle, testSuite.id, TSTTDetial(testSuite.schedules)
 
 # s = TSTT('/Volumes/ProjectsHD/TinyTools/RadarWebService/newMethod_6_Append/_ScheduleProjects/OSX/_TestSuite/778363')
 
