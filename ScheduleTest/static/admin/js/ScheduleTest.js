@@ -97,7 +97,8 @@ function windowToCanvas(e) {
 };
 
 //响应点击 onmousedown
-canvas.ondblclick = function(e) {
+//ondblclick
+canvas.onclick = function(e) {
    var loc = windowToCanvas(e);
    inshapesm = false
    //alert(loc.x);
@@ -107,12 +108,14 @@ canvas.ondblclick = function(e) {
       polygon.createPath(context);
       if (context.isPointInPath(loc.x, loc.y)) {
          alert(sindex[i][1] + ' -- ' + sindex[i][0] + ' x:' + loc.x + ' y:' + loc.y);
-         document.getElementById('iframe_a').src = "t2.html";
+         //document.getElementById('iframe_a').src = "t2.html";
+         document.getElementById('iframe_a').src = "/ScheduleTestselect/?project=" + sindex[i][1] + "&schedule=" + sindex[i][0] + "&id=" + sindex[i][2];
          alert(document.getElementById('iframe_a').src);
          inshapesm = true
       }
       i = i + 1
    });
+   /*
    if (!inshapesm) {
       //不在小的里面,检测大的
       i = 0
@@ -120,12 +123,13 @@ canvas.ondblclick = function(e) {
          polygon.createPath(context);
          if (context.isPointInPath(loc.x, loc.y)) {
             alert(projects[i][0][3] + ' x:' + loc.x + ' y:' + loc.y);
-            document.getElementById('iframe_a').src = "t2.html";
+            document.getElementById('iframe_a').src = "/ScheduleTestselect/?=xxx";
+            //document.getElementById('iframe_a').src = "t2.html";
             alert(document.getElementById('iframe_a').src);
          }
          i = i + 1
       });
-   }
+   }*/
 }
 
 //处理 projects
@@ -178,7 +182,7 @@ function projectsinit() {
             polygon.addPoint(point.x, point.y);
          });
          shapesm.push(polygon);
-         sindex.push([projects[i][j][3], projects[i][0][3]])
+         sindex.push([projects[i][j][3], projects[i][0][3], projects[i][0][4],])
 
          //文字
          var tw = getSHtextpxwidth(tt, bt, ww);
