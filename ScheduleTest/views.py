@@ -39,7 +39,7 @@ def sssScheduleTest(request):
     return render_to_response('ScheduleTest.html',{"projects":projects, "CHeight":getHseight(projects), "BHeight":getHseight(projects) + 4, "weekly":weekly, "webinfo":webinfo},)
 
 def ScheduleTest(request):
-    seleckweekly = request.GET.get('seleckweekly','0')
+    seleckweekly = request.GET.get('seleckweekly','00')
     if('select_weeks' in request.session):
         select_weeks = request.session['select_weeks']
     else:
@@ -48,6 +48,7 @@ def ScheduleTest(request):
         select_weeks = 0
     else:
         select_weeks = int(select_weeks) + int(seleckweekly)
+        print 'ScheduleTest select_weeksxx', select_weeks
     request.session['select_weeks'] = select_weeks
     projects = projList(weekly=select_weeks)
     weekly = weekToDate(select_weeks)
@@ -61,7 +62,7 @@ def ScheduleTestselect(request):
     return render_to_response('ScheduleTestwelcome.html',{ "webinfo":webinfo},)
 
 def ScheduleTestseleckweekly(request):
-    seleckweekly = request.GET.get('seleckweekly','0')
+    seleckweekly = request.GET.get('seleckweekly','00')
     if('select_weeks' in request.session):
         select_weeks = request.session['select_weeks']
     else:
