@@ -81,9 +81,10 @@ def getTSTTList(folder):
 	TSTTList = []
 	for projFolder in os.listdir(folder):
 		_TestSuite = '%s/%s/_TestSuite'%(folder, projFolder)
-		for file in os.listdir(_TestSuite):
-			if file.isdigit():
-				TSTTList.append(os.path.join(_TestSuite, file))
+		if os.path.isdir(_TestSuite):
+			for file in os.listdir(_TestSuite):
+				if file.isdigit():
+					TSTTList.append(os.path.join(_TestSuite, file))
 	return TSTTList
 
 def weekToDate(week=0): #0 表示本周 ，－1 表示上一周，会根据输入的数字返回对应星期周一到周日的日期（2015-03-12）
