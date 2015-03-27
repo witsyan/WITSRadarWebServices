@@ -69,7 +69,8 @@ def useAPI(command, RequestBody='', ids=''): # use sh script to capture bugs fro
 				mailtoLeaders('tinyliu@me.com', 'Radar is unable to authenticate your account because IdMS has experienced an error.', '%s - %s\n%s'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, response))
 				sys.exit()
 			print '## Dict Model:\n%s\n'%json
-			mailtoLeaders('tinyliu@me.com', 'Radar is unable to authenticate your account because IdMS has experienced an error.', '%s - %s\n%s'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, response))
+			if '503 Service Unavailable' not in json:
+				mailtoLeaders('tinyliu@me.com', 'Radar is unable to authenticate your account because IdMS has experienced an error.', '%s - %s\n%s'%(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), RequestBody, response))
 			return []
 		except IndexError, e:
 			print '%s\n%s'%(e, response)
