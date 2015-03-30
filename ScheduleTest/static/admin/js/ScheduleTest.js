@@ -107,10 +107,10 @@ canvas.onclick = function(e) {
    shapesm.forEach(function(polygon) {
       polygon.createPath(context);
       if (context.isPointInPath(loc.x, loc.y)) {
-         alert(sindex[i][1] + ' -- ' + sindex[i][0] + ' x:' + loc.x + ' y:' + loc.y);
+         //alert(sindex[i][1] + ' -- ' + sindex[i][0] + ' x:' + loc.x + ' y:' + loc.y);
          //document.getElementById('iframe_a').src = "t2.html";
-         document.getElementById('iframe_a').src = "/ScheduleTestselect/?project=" + sindex[i][1] + "&schedule=" + sindex[i][0] + "&id=" + sindex[i][2];
-         alert(document.getElementById('iframe_a').src);
+         document.getElementById('iframe_a').src = "/ScheduleTestselect/?id=" + sindex[i][2] + "&project=" + stringreplace(sindex[i][1]) + "&schedule=" + stringreplace(sindex[i][0]);
+         //alert(document.getElementById('iframe_a').src);
          inshapesm = true
       }
       i = i + 1
@@ -296,6 +296,12 @@ function drawlines() {
       context.restore();
    }
 }
+
+function stringreplace(t) {
+   var r = t.replace("#","%23");
+   return r
+}
+
 
 projectsinit();
 drawShapes();

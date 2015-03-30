@@ -53,13 +53,20 @@ def ScheduleTest(request):
     projects = projList(weekly=select_weeks)
     weekly = weekToDate(select_weeks)
     #print weekly
-    #print projects
+    print projects
     print 'ScheduleTest select_weeks', select_weeks
     return render_to_response('ScheduleTest.html',{"projects":projects, "CHeight":getHseight(projects), "BHeight":getHseight(projects) + 4, "weekly":weekly, "webinfo":webinfo, "select_weeks":select_weeks},)
 
 
 def ScheduleTestselect(request):
-    return render_to_response('ScheduleTestwelcome.html',{ "webinfo":webinfo},)
+    seleckproject = request.GET.get('project','')
+    seleckschedule = request.GET.get('schedule','')
+    seleckid = request.GET.get('id','')
+    print "==========", seleckproject, seleckschedule, seleckid#, request
+    if seleckid == '':
+        return render_to_response('ScheduleTestwelcome.html',{ "webinfo":webinfo},)
+    else:
+        return render_to_response('ScheduleDetail.html',{ "webinfo":webinfo, "seleckproject":seleckproject, "seleckschedule":seleckschedule, "seleckid":seleckid},)
 
 def ScheduleTestseleckweekly(request):
     seleckweekly = request.GET.get('seleckweekly','00')
